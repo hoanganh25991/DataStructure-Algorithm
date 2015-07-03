@@ -78,9 +78,24 @@ public class MainUtils {
 	}
 
 	public static int[] getRandomArrayNumber(int howManyNum) {
+		ArrayList<Integer> arrayNum = new ArrayList<Integer>();
+		while (arrayNum.size() < howManyNum) {
+			int newNum = (int) (Math.random() * howManyNum * 10);
+			boolean isDiff = true;
+			for (Integer num : arrayNum) {
+				if (num.equals(newNum)) {
+					isDiff = false;
+					break;
+				}
+			}
+			if (isDiff) {
+				arrayNum.add(newNum);
+			}
+
+		}
 		int[] a = new int[howManyNum];
-		for (int i = 0; i < howManyNum; i++) {
-			a[i] = (int) (Math.random() * howManyNum * 10);
+		for (int i = 0; i < arrayNum.size(); i++) {
+			a[i] = arrayNum.get(i);
 		}
 		return a;
 	}
