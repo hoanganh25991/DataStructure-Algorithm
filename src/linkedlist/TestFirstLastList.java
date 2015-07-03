@@ -1,8 +1,8 @@
-package hoanganh.linkedlist;
+package linkedlist;
 
 import java.io.IOException;
 
-import hoanganh.utils.MainUtils;
+import utils.MainUtils;
 
 public class TestFirstLastList {
 	public static void main(String[] args) throws IOException {

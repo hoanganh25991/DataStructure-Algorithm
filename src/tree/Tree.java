@@ -1,4 +1,4 @@
-package hoanganh.tree;
+package tree;
 
 public class Tree {
 	private Node root;

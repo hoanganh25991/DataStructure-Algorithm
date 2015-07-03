@@ -1,9 +1,9 @@
-package hoanganh.recursion;
+package recursion;
 
 import java.io.IOException;
 import java.util.Queue;
 
-import hoanganh.utils.MainUtils;
+import utils.MainUtils;
 
 public class MergeSort {
 	private static int[] numbersArray;

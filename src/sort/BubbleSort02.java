@@ -1,8 +1,8 @@
-package hoanganh.sort;
+package sort;
 
 import java.io.IOException;
 
-import hoanganh.utils.MainUtils;
+import utils.MainUtils;
 
 public class BubbleSort02 {
 	private static int[] nums;

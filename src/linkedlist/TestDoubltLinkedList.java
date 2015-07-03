@@ -1,8 +1,8 @@
-package hoanganh.linkedlist;
-
-import hoanganh.utils.MainUtils;
+package linkedlist;
 
 import java.io.IOException;
+
+import utils.MainUtils;
 
 public class TestDoubltLinkedList {
 	public static void main(String[] args) throws IOException {

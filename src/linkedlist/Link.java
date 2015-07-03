@@ -1,4 +1,4 @@
-package hoanganh.linkedlist;
+package linkedlist;
 
 public class Link {
 	public int value;

@@ -1,8 +1,8 @@
-package hoanganh.tree;
+package tree;
 
 import java.io.IOException;
 
-import hoanganh.utils.MainUtils;
+import utils.MainUtils;
 
 public class TestTree {
 	public static void main(String[] args) throws IOException {
