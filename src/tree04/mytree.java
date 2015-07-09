@@ -72,11 +72,12 @@ public class mytree {
 		if (deletenode == null) {
 			return false;
 		} else {
-			// case 1: has no child
 			if (deletenode.left == null && deletenode.right == null) {
-				System.out.println("case 1");
+				// case 1: has no child
+				System.out.println("// case 1: has no child");
 				if (parentdelete == null) {
 					// root case
+					System.out.println("root case");
 					root = null;
 				} else {
 					if (parentdelete.mdata > deletenode.mdata) {
@@ -86,9 +87,11 @@ public class mytree {
 						parentdelete.right = null;
 					}
 				}
-			} else if (deletenode.left != null || deletenode.right != null) {
+			} else if (deletenode.left == null || deletenode.right == null) {
 				// case 2: has one child
+				System.out.println("// case 2: has one child");
 				mynode nearnode = nearnode(deletenode);
+				System.out.println("nearnode: " + nearnode);
 				if (parentdelete == null) {
 					stacknode.add(root);
 					stackvalue.add(nearnode.mdata);
@@ -104,6 +107,7 @@ public class mytree {
 				}
 			} else {
 				// case 3: has two children
+				System.out.println("// case 3: has two children");
 				mynode nearnode = nearnode(deletenode);
 				stacknode.add(deletenode);
 				stackvalue.add(nearnode.mdata);
@@ -146,7 +150,11 @@ public class mytree {
 			return;
 		} else {
 			travel(start.left);
-			System.out.print(start + " ");
+			if (start == root) {
+				System.out.print("[" + start.mdata + "-root]" + " ");
+			} else {
+				System.out.print(start + " ");
+			}
 			travel(start.right);
 		}
 	}
