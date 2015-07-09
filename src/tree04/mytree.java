@@ -6,26 +6,29 @@ public class mytree {
 	mynode root;
 	int num;
 	int layer;
-	mynode parent;
 
 	public mytree() {
 		root = null;
 		num = 0;
 		layer = 0;
-		parent = null;
 	}
 
 	public boolean insert(int value) {
+		int currentlayer = 0;
 		mynode current = root;
 		mynode parent = null;
 		if (root == null) {
 			root = new mynode(value);
+			num++;
+			currentlayer++;
+			if (currentlayer > layer) {
+				layer = currentlayer;
+			}
 			return true;
 		}
 		while (current != null) {
 			parent = current;
 			if (current.mdata == value) {
-				System.out.println(value + " already exists");
 				return false;
 			} else if (current.mdata > value) {
 				current = current.left;
@@ -33,31 +36,40 @@ public class mytree {
 			} else {
 				current = current.right;
 			}
+			currentlayer++;
 		}
 		if (parent.mdata > value) {
 			parent.left = new mynode(value);
+			if (parent.right == null) {
+				currentlayer++;
+			}
 		} else {
 			parent.right = new mynode(value);
+			if (parent.left == null) {
+				currentlayer++;
+			}
 		}
 		num++;// increase number of elements
+		if (currentlayer > layer) {
+			System.out.println("insert " + value + "; current layer "
+					+ currentlayer);
+			layer = currentlayer;
+			System.out.println("layer: " + layer);
+		} else {
+			System.out.println("insert " + value + ";layer: " + layer);
+		}
 		return true;
 	}
 
 	public mynode find(int value) {
 		mynode current = root;
-		if (root.mdata == value) {
-			parent = null;
-			return root;
-		}
 		while (current != null) {
 			if (current.mdata == value) {
-				// parent = current; // save current right before it changes
+				// [WRONG] parent = current
 				return current;
 			} else if (current.mdata > value) {
-				parent = current; // save current right before it goes deep
 				current = current.left;
 			} else {
-				parent = current; // save current right before it goes deep
 				current = current.right;
 			}
 		}
@@ -65,10 +77,14 @@ public class mytree {
 	}
 
 	public boolean delete(int value) {
-		mynode deletenode = find(value);
-		mynode parentdelete = parent;
-		ArrayList<mynode> stacknode = new ArrayList<mynode>();
-		ArrayList<Integer> stackvalue = new ArrayList<Integer>();
+		final parentsave p = findparentsave(value);
+		final mynode deletenode = p.deletenode;
+		final mynode parentdelete = p.parentdelete;// using private class,
+													// findSaveParent() to
+		// return object has both 'delete node'
+		// and 'its parent'
+		final ArrayList<mynode> stacknode = new ArrayList<mynode>();
+		final ArrayList<Integer> stackvalue = new ArrayList<Integer>();
 		if (deletenode == null) {
 			return false;
 		} else {
@@ -79,6 +95,7 @@ public class mytree {
 					// root case
 					System.out.println("root case");
 					root = null;
+					num--; // decrease number of elements
 				} else {
 					if (parentdelete.mdata > deletenode.mdata) {
 						// delete node by set parent link to it 'null'
@@ -86,13 +103,14 @@ public class mytree {
 					} else {
 						parentdelete.right = null;
 					}
+					num--; // decrease number of elements
 				}
 			} else if (deletenode.left == null || deletenode.right == null) {
 				// case 2: has one child
 				System.out.println("// case 2: has one child");
-				mynode nearnode = nearnode(deletenode);
-				System.out.println("nearnode: " + nearnode);
+				final mynode nearnode = nearnode(deletenode);
 				if (parentdelete == null) {
+					System.out.println("root case");
 					stacknode.add(root);
 					stackvalue.add(nearnode.mdata);
 					delete(nearnode.mdata);
@@ -104,11 +122,12 @@ public class mytree {
 					} else {
 						parentdelete.right = nearnode;
 					}
+					num--; // decrease number of elements
 				}
 			} else {
 				// case 3: has two children
 				System.out.println("// case 3: has two children");
-				mynode nearnode = nearnode(deletenode);
+				final mynode nearnode = nearnode(deletenode);
 				stacknode.add(deletenode);
 				stackvalue.add(nearnode.mdata);
 				delete(nearnode.mdata);
@@ -117,7 +136,6 @@ public class mytree {
 			for (int i = stacknode.size() - 1; i > -1; i--) {
 				stacknode.get(i).mdata = stackvalue.get(i);
 			}
-			num--; // decrease number of elements
 			return true;
 		}
 
@@ -162,5 +180,38 @@ public class mytree {
 	public void display() {
 		travel(root);
 		System.out.println();
+		System.out.println("number of elements: " + num);
+		System.out.println("number of layers: " + layer);
+	}
+
+	private parentsave findparentsave(int value) {
+		final parentsave p = new parentsave();
+		mynode current = root;
+		while (current != null) {
+			if (current.mdata == value) {
+				// [WRONG] parent = current
+				p.deletenode = current;
+				return p;
+			} else if (current.mdata > value) {
+				p.parentdelete = current; // save current right before it goes
+				// deep
+
+				current = current.left;
+			} else {
+				p.parentdelete = current; // save current right before it goes
+				// deep
+				current = current.right;
+			}
+		}
+		return p;
+	}
+
+	private class parentsave {
+		mynode deletenode;
+		mynode parentdelete;
+
+		public parentsave() {
+
+		}
 	}
 }
