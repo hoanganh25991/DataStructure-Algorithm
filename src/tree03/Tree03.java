@@ -1,5 +1,8 @@
 package tree03;
 
+import java.security.AllPermission;
+import java.util.ArrayList;
+
 public class Tree03 {
 	Node03 root;
 	int size;
@@ -94,6 +97,8 @@ public class Tree03 {
 
 	public boolean delete(double value) {
 		Node03 deleteNode = find(value);
+		ArrayList<Double> storeData = new ArrayList<Double>();
+		ArrayList<Node03> storeNode = new ArrayList<Node03>();
 		if (deleteNode != null) {
 			// case 1: deleteNode has no children
 			if (deleteNode == nearValue(deleteNode)) {
@@ -106,14 +111,21 @@ public class Tree03 {
 				}
 			} else {
 				// con thieu gan node la xong
-				double value1 = nearValue(deleteNode).mData;
-				Node03 deleteNodeParent = findparent(deleteNode.mData);
-				if (deleteNode == deleteNodeParent.left) {
-					deleteNodeParent.left = nearValue(deleteNode);
-				} else {
-					deleteNodeParent.right = nearValue(deleteNode);
+				while (deleteNode != nearValue(deleteNode)) {
+					Node03 deleteNodeParent = findparent(deleteNode.mData);
+					System.out.println("delete node parent:  "
+							+ deleteNodeParent);
+					Node03 alternate = nearValue(deleteNode);
+					System.out.println("alter node:  " + alternate);
+					storeNode.add(deleteNode);
+					storeData.add(alternate.mData);
+					// now again recurse by deleting alter
+					deleteNode = nearValue(alternate);
 				}
-				delete(value1);
+				delete(deleteNode.mData);
+			}
+			for(int i = storeData.size() -1; i > -1; i--){
+				storeNode.get(i).mData = storeData.get(i);
 			}
 			return true;
 		} else {
@@ -146,6 +158,10 @@ public class Tree03 {
 		}
 	}
 
+	// public Node03 findpNode03(Node03 node){
+	//
+	//
+	// }
 	public Node03 nearValue(Node03 startNode) {
 		// start find on left
 		if (startNode.left != null) {
